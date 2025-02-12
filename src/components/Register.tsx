@@ -9,8 +9,7 @@ import {
   MenuItem,
   Select,
   FormControl,
-  InputLabel,
-  FormHelperText,
+  InputLabel
 } from "@mui/material";
 
 interface Usuario {

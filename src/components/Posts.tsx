@@ -118,7 +118,7 @@ const Posts: React.FC = () => {
         </>
       )}
 
-      {/* 🔹 Lista de publicaciones con Material UI */}
+      {/* Lista de publicaciones */}
       <List sx={{ width: "100%", bgcolor: "background.paper", mt: 2 }}>
         {posts.map((post, index) => (
           <React.Fragment key={post.id}>
@@ -138,7 +138,7 @@ const Posts: React.FC = () => {
               />
             </ListItem>
 
-            {/* 🔹 Sección de comentarios */}
+            {/* Sección de comentarios */}
             {post.comments && post.comments.length > 0 && (
               <List sx={{ pl: 4 }}>
                 {post.comments.map((comment) => (
@@ -159,7 +159,7 @@ const Posts: React.FC = () => {
               </List>
             )}
 
-            {/* 🔹 Formulario para comentar */}
+            {/* Formulario para comentar */}
             {authUser && (
               <ListItem sx={{ pl: 4 }}>
                 <TextField
@@ -182,7 +182,7 @@ const Posts: React.FC = () => {
               </ListItem>
             )}
 
-            {/* 🔹 Botón de eliminar (solo si el usuario es admin) */}
+            {/* Botón de eliminar (solo si el usuario es admin) */}
             {role === "admin" && (
               <ListItem>
                 <Button variant="contained" color="secondary" onClick={() => handleDeletePost(post.id)}>

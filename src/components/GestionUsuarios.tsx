@@ -136,7 +136,7 @@ const GestionUsuarios: React.FC = () => {
         </Table>
       </TableContainer>
 
-      {/* 🔹 Diálogo para editar usuario */}
+      {/* Editar usuario */}
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Editar Usuario</DialogTitle>
         <DialogContent>
@@ -165,7 +165,7 @@ const GestionUsuarios: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             margin="normal"
           />
-          {/* 🔹 Selección de Rol (solo selección, no edición directa) */}
+          
           <FormControl fullWidth margin="normal">
             <InputLabel>Rol</InputLabel>
             <Select value={roleEdit} onChange={(e) => setRoleEdit(e.target.value)} >
