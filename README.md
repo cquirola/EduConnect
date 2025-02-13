@@ -38,7 +38,7 @@ Para instalar y ejecutar la aplicación, sigue estos pasos:
   - Clona el repositorio usando este comando:
 
     ```bash
-    git clone https://github.com/tuusuario/educonnect.git
+    git clone https://github.com/cquirola/EduConnect.git
     ```
 
 - **Navegar al directorio del proyecto:**
