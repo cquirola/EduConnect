@@ -1,4 +1,6 @@
 // src/App.tsx
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./components/AuthContext";
@@ -11,6 +13,8 @@ import Dashboard from "./components/Dashboard";
 import Posts from "./components/Posts";
 import Usuarios from "./components/Usuarios";
 import GestionUsuarios from "./components/GestionUsuarios";
+import theme from './components/teme';
+
 
 const AppContent: React.FC = () => {
   const { authUser, role } = useAuth();
@@ -28,17 +32,21 @@ const AppContent: React.FC = () => {
         <Route path="/usuarios" element={authUser && role === "admin" ? <Usuarios /> : <Navigate to="/login" />} />
         <Route path="/gestion-usuarios" element={authUser && role === "admin" ? <GestionUsuarios /> : <Navigate to="/login" />} />
       </Routes>
+    
     </>
   );
 };
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <AuthProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 

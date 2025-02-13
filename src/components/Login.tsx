@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { styled } from "@mui/system";
 
 // Definir la interfaz de usuario
 interface Usuario {
@@ -10,6 +11,21 @@ interface Usuario {
   password: string;
   role: string;
 }
+
+const Background = styled(Box)({
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  backgroundImage: "url('https://i.pinimg.com/736x/b1/41/51/b1415137a5a362eba7792f612ff5e859.jpg')",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundRepeat: "no-repeat",
+});
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -43,36 +59,38 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh">
-        <Typography variant="h4" gutterBottom>
-          Iniciar Sesión
-        </Typography>
-        {error && <Typography color="error">{error}</Typography>}
-        <form onSubmit={handleLogin}>
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Usuario"
-            variant="outlined"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Contraseña"
-            variant="outlined"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            Ingresar
-          </Button>
-        </form>
-      </Box>
-    </Container>
+    <Background>
+      <Container maxWidth="sm">
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" padding={4} bgcolor="rgba(255, 255, 255, 0.8)" borderRadius={2} boxShadow={3}>
+          <Typography variant="h4" gutterBottom>
+            Iniciar Sesión
+          </Typography>
+          {error && <Typography color="error">{error}</Typography>}
+          <form onSubmit={handleLogin} style={{ width: "100%" }}>
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Usuario"
+              variant="outlined"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              margin="normal"
+              label="Contraseña"
+              variant="outlined"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Ingresar
+            </Button>
+          </form>
+        </Box>
+      </Container>
+    </Background>
   );
 };
 

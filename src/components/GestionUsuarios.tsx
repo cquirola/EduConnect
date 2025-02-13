@@ -19,6 +19,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Box,
 } from "@mui/material";
 import { useAuth } from "./AuthContext";
 
@@ -89,52 +90,69 @@ const GestionUsuarios: React.FC = () => {
   }
 
   return (
-    <div>
-      <TableContainer component={Paper}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      padding={2}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          padding: "24px",
+          maxWidth: "800px", // Reducir el tamaño máximo para centrar más
+          width: "100%",
+          textAlign: "center",
+          overflow: "hidden",
+        }}
+      >
         <Typography variant="h4" gutterBottom>
           Gestión de Usuarios
         </Typography>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Apellido</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Rol</TableCell>
-              <TableCell>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {usuarios.map((usuario) => (
-              <TableRow key={usuario.id}>
-                <TableCell>{usuario.id}</TableCell>
-                <TableCell>{usuario.nombre}</TableCell>
-                <TableCell>{usuario.apellido}</TableCell>
-                <TableCell>{usuario.email}</TableCell>
-                <TableCell>{usuario.role}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => editarUsuario(usuario)}
-                  >
-                    Editar
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => eliminarUsuario(usuario.id)}
-                    sx={{ ml: 1 }}
-                  >
-                    Eliminar
-                  </Button>
-                </TableCell>
+        <TableContainer component={Paper} sx={{ maxHeight: 400, overflow: 'auto' }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Nombre</TableCell>
+                <TableCell>Apellido</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Rol</TableCell>
+                <TableCell>Acciones</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {usuarios.map((usuario) => (
+                <TableRow key={usuario.id}>
+                  <TableCell>{usuario.id}</TableCell>
+                  <TableCell>{usuario.nombre}</TableCell>
+                  <TableCell>{usuario.apellido}</TableCell>
+                  <TableCell>{usuario.email}</TableCell>
+                  <TableCell>{usuario.role}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => editarUsuario(usuario)}
+                    >
+                      Editar
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => eliminarUsuario(usuario.id)}
+                      sx={{ ml: 1 }}
+                    >
+                      Eliminar
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
 
       {/* Editar usuario */}
       <Dialog open={open} onClose={handleClose}>
@@ -165,10 +183,9 @@ const GestionUsuarios: React.FC = () => {
             onChange={(e) => setEmail(e.target.value)}
             margin="normal"
           />
-          
           <FormControl fullWidth margin="normal">
             <InputLabel>Rol</InputLabel>
-            <Select value={roleEdit} onChange={(e) => setRoleEdit(e.target.value)} >
+            <Select value={roleEdit} onChange={(e) => setRoleEdit(e.target.value)}>
               <MenuItem value="publicador">Publicador</MenuItem>
               <MenuItem value="admin">Administrador</MenuItem>
             </Select>
@@ -183,7 +200,7 @@ const GestionUsuarios: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
 };
 
