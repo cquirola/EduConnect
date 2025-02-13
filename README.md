@@ -81,5 +81,4 @@ Para instalar y ejecutar la aplicación, sigue estos pasos:
 - **Si la instalación fue correcta:** 
 
 Podrás ver la aplicación en el puerto correspondiente. Por ejemplo:
-
 Local: http://localhost:5175/
