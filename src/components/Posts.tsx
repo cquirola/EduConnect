@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -8,18 +9,17 @@ import {
   ListItemAvatar,
   Avatar,
   ListItemText,
+  Divider,
   Typography,
-  Paper,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { useAuth } from "./AuthContext";
 
-//Interfaz de la publicación y comentario
+//Interface de publicación y comentario
 interface Post {
   id: number;
   author: string;
   content: string;
-  comments: Comment[];
+  comments?: Comment[];
 }
 
 interface Comment {
@@ -28,47 +28,19 @@ interface Comment {
   text: string;
 }
 
-// Estilos personalizados
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  marginBottom: theme.spacing(3),
-  backgroundColor: '#fff5ee',
-}));
 
-// Contenedor personalizado
-const StyledContainer = styled(Container)(({ theme }) => ({
-  marginTop: theme.spacing(4),
-  marginBottom: theme.spacing(4),
-}));
-
-// Estilos personalizados para la publicación
-const PostPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  marginBottom: theme.spacing(2),
-  '&:hover': {
-    boxShadow: theme.shadows[4],
-  },
-  transition: 'box-shadow 0.3s ease-in-out',
-}));
-
-// Contenedor para los comentarios
-const CommentSection = styled('div')(({ theme }) => ({
-  marginLeft: theme.spacing(7),
-  marginTop: theme.spacing(1),
-}));
-
-// Componente funcional Posts/Publicaciones
+//Componente funcional Publicaciones
 const Posts: React.FC = () => {
-  // Obtener el usuario autenticado y su rol
+  //Obtener el usuario autenticado y el rol
   const { authUser, role } = useAuth();
-  // Estados para las publicaciones y comentarios
+  //Lista de publicaciones
   const [posts, setPosts] = useState<Post[]>([]);
-  // Estado para la nueva publicación
+  //Estado para almacenar el contenido de la nueva publicación
   const [newPost, setNewPost] = useState<string>("");
-  // Estado para el texto de los comentarios
+  //Estado para almacenar los comentarios
   const [commentTexts, setCommentTexts] = useState<{ [key: number]: string }>({});
 
-  // Cargar las publicaciones desde localStorage
+  //Obtener las publicaciones almacenadas en localStorage
   useEffect(() => {
     const storedPosts = localStorage.getItem("posts");
     if (storedPosts) {
@@ -76,150 +48,169 @@ const Posts: React.FC = () => {
     }
   }, []);
 
-  // Guardar las publicaciones en localStorage
+  //Actualizar las publicaciones en localStorage
   useEffect(() => {
-    localStorage.setItem("posts", JSON.stringify(posts));
+    if (posts.length > 0) {
+      localStorage.setItem("posts", JSON.stringify(posts));
+    }
   }, [posts]);
 
-  // Función para agregar una nueva publicación
+  //Agregar una nueva publicación
   const handleAddPost = () => {
-    if (newPost.trim()) {
+    if (newPost.trim() !== "") {
       const post: Post = {
-        id: Date.now(), // ID único
+        id: posts.length + 1,
         author: authUser || "Anónimo",
         content: newPost,
         comments: [],
       };
-      setPosts([...posts, post]);
+      const updatedPosts = [...posts, post];
+      setPosts(updatedPosts);
+      localStorage.setItem("posts", JSON.stringify(updatedPosts));
       setNewPost("");
     }
   };
 
-  // Función para eliminar una publicación
+  //Eliminar una publicación
   const handleDeletePost = (id: number) => {
-    setPosts(posts.filter((post) => post.id !== id));
+    const filteredPosts = posts.filter((post) => post.id !== id);
+    setPosts(filteredPosts);
+    localStorage.setItem("posts", JSON.stringify(filteredPosts));
   };
 
-  // Función para manejar los comentarios
+  //Manejar el cambio en el campo de comentario
   const handleCommentChange = (postId: number, text: string) => {
-    setCommentTexts({ ...commentTexts, [postId]: text });
+    setCommentTexts((prev) => ({
+      ...prev,
+      [postId]: text,
+    }));
   };
 
-  // Función para agregar un comentario
+  //Agregar un comentario a una publicación
   const handleAddComment = (postId: number) => {
-    if (!commentTexts[postId]?.trim()) return;
+    const text = commentTexts[postId]?.trim();
+    if (!text) return;
 
-    setPosts(posts.map((post) => {
+    //Actualizar la lista de publicaciones con el nuevo comentario
+    const updatedPosts = posts.map((post) => {
       if (post.id === postId) {
-        return {
-          ...post,
-          comments: [...post.comments, {
-            id: Date.now(),
-            author: authUser || "Anónimo",
-            text: commentTexts[postId],
-          }],
+        const newComment: Comment = {
+          id: post.comments ? post.comments.length + 1 : 1,
+          author: authUser || "Anónimo",
+          text,
         };
+        return { ...post, comments: [...(post.comments || []), newComment] };
       }
       return post;
-    }));
-    setCommentTexts({ ...commentTexts, [postId]: "" });
+    });
+
+    //Actualizar el estado y almacenar en localStorage
+    setPosts(updatedPosts);
+    localStorage.setItem("posts", JSON.stringify(updatedPosts));
+    setCommentTexts((prev) => ({ ...prev, [postId]: "" }));
   };
 
-  // Componente de publicaciones
+  //Retornar la lista de publicaciones
   return (
-    <StyledContainer maxWidth="sm">
-      <StyledPaper elevation={0}>
-        <Typography variant="h4" gutterBottom sx={{ color: '#bf360c' }}>
-          Publicaciones
-        </Typography>
+    <Container maxWidth="sm">
+      <Typography variant="h4" gutterBottom>
+        Publicaciones
+      </Typography>
 
-        {authUser && (
-          <Paper elevation={3} sx={{ p: 2, mb: 3 }}>
-            <TextField
-              fullWidth
-              label="Escribe una publicación..."
-              variant="outlined"
-              value={newPost}
-              onChange={(e) => setNewPost(e.target.value)}
-              margin="normal"
-              sx={{ '& .MuiOutlinedInput-input': { color: '#000' } }}
-            />
-            <Button 
-              onClick={handleAddPost} 
-              variant="contained" 
-              sx={{ mt: 1, bgcolor: '#8b4513', '&:hover': { bgcolor: '#6b3410' } }}
-            >
-              Publicar
-            </Button>
-          </Paper>
-        )}
+      {authUser && (
+        <>
+          <TextField
+            fullWidth
+            label="Escribe una publicación..."
+            variant="outlined"
+            value={newPost}
+            onChange={(e) => setNewPost(e.target.value)}
+            margin="normal"
+          />
+          <Button onClick={handleAddPost} variant="contained" color="primary" sx={{ mt: 1 }}>
+            Publicar
+          </Button>
+        </>
+      )}
 
-        <List>
-          {posts.map((post) => (
-            <PostPaper key={post.id} elevation={2}>
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: '#125688' }}>{post.author[0]}</Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={<Typography sx={{ color: '#125688', fontWeight: 'bold' }}>{post.author}</Typography>}
-                  secondary={<Typography>{post.content}</Typography>}
+      {/* Lista de publicaciones */}
+      <List sx={{ width: "100%", mt: 3 }}>
+        {posts.map((post, index) => (
+          <React.Fragment key={post.id}>
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt={post.author} src={"/src/avatars/avatar.png"} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={post.author}
+                secondary={
+                  <>
+                    <Typography component="span" variant="body2" color="text.primary">
+                      {post.content}
+                    </Typography>
+                  </>
+                }
+              />
+            </ListItem>
+
+            {/* Sección de comentarios */}
+            {post.comments && post.comments.length > 0 && (
+              <List sx={{ pl: 4 }}>
+                {post.comments.map((comment) => (
+                  <ListItem key={comment.id} sx={{ pt: 0, pb: 0 }}>
+                    <ListItemAvatar>
+                      <Avatar alt={comment.author} src={"/src/avatars/avatar.png"} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={comment.author}
+                      secondary={
+                        <Typography component="span" variant="body2">
+                          {comment.text}
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            )}
+
+            {/* Formulario para comentar */}
+            {authUser && (
+              <ListItem sx={{ pl: 4 }}>
+                <TextField
+                  fullWidth
+                  label="Añadir un comentario..."
+                  variant="outlined"
+                  value={commentTexts[post.id] || ""}
+                  onChange={(e) => handleCommentChange(post.id, e.target.value)}
+                  margin="normal"
+                  size="small"
                 />
-              </ListItem>
-
-              {post.comments.length > 0 && (
-                <CommentSection>
-                  {post.comments.map((comment) => (
-                    <ListItem key={comment.id} sx={{ py: 1 }}>
-                      <ListItemAvatar>
-                        <Avatar sx={{ bgcolor: '#8b4513', width: 32, height: 32 }}>{comment.author[0]}</Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={<Typography variant="subtitle2" color="primary">{comment.author}</Typography>}
-                        secondary={comment.text}
-                      />
-                    </ListItem>
-                  ))}
-                </CommentSection>
-              )}
-
-              {authUser && (
-                <CommentSection>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    label="Añadir un comentario..."
-                    variant="outlined"
-                    value={commentTexts[post.id] || ""}
-                    onChange={(e) => handleCommentChange(post.id, e.target.value)}
-                    sx={{ '& .MuiOutlinedInput-input': { color: '#000' } }}
-                  />
-                  <Button
-                    onClick={() => handleAddComment(post.id)}
-                    variant="contained"
-                    size="small"
-                    sx={{ mt: 1, bgcolor: '#8b4513', '&:hover': { bgcolor: '#6b3410' } }}
-                  >
-                    Comentar
-                  </Button>
-                </CommentSection>
-              )}
-
-              {role === "admin" && (
-                <Button 
-                  variant="contained" 
-                  color="error" 
-                  onClick={() => handleDeletePost(post.id)}
-                  sx={{ ml: 2, mt: 1 }}
+                <Button
+                  onClick={() => handleAddComment(post.id)}
+                  variant="contained"
+                  color="primary"
+                  sx={{ ml: 1 }}
                 >
+                  Comentar
+                </Button>
+              </ListItem>
+            )}
+
+            {/* Botón de eliminar (solo si el usuario es admin) */}
+            {role === "admin" && (
+              <ListItem>
+                <Button variant="contained" color="secondary" onClick={() => handleDeletePost(post.id)}>
                   Eliminar
                 </Button>
-              )}
-            </PostPaper>
-          ))}
-        </List>
-      </StyledPaper>
-    </StyledContainer>
+              </ListItem>
+            )}
+
+            {index < posts.length - 1 && <Divider variant="inset" component="li" />}
+          </React.Fragment>
+        ))}
+      </List>
+    </Container>
   );
 };
 
