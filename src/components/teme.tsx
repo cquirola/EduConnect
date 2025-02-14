@@ -1,7 +1,7 @@
-// src/components/theme.tsx
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
+  // Paleta de colores
   palette: {
     primary: {
       main: "#8B7355", 
@@ -9,21 +9,25 @@ const theme = createTheme({
       dark: "#6F5B3E", 
       contrastText: "#ffffff", 
     },
+    // Paleta de colores secundaria
     secondary: {
       main: "#D2B48C", 
       light: "#E8D1B3", 
       dark: "#A68B72",
       contrastText: "#000000",
     },
+    // Paleta de colores de fondo
     background: {
       default: "#F5F5F5", 
       paper: "#ffffff", 
     },
+    // Paleta de colores del texto
     text: {
       primary: "#4A3728", 
       secondary: "#8B7355", 
     },
   },
+  // Tipografía
   typography: {
     fontFamily: '"Roboto", "Playfair Display", serif',
     h3: {
@@ -42,6 +46,7 @@ const theme = createTheme({
       color: "#8B7355", 
     },
   },
+  // Estilos globales
   components: {
     MuiCssBaseline: {
       styleOverrides: {

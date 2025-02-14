@@ -1,4 +1,3 @@
-// src/components/Register.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,6 +13,7 @@ import {
   Paper,
 } from "@mui/material";
 
+// Definir la interfaz de usuario
 interface Usuario {
   id: number;
   nombre: string;
@@ -24,7 +24,9 @@ interface Usuario {
   role: string;
 }
 
+// Componente funcional Registro de Usuario
 const Register: React.FC = () => {
+  // Estados para los campos del formulario
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
@@ -37,12 +39,14 @@ const Register: React.FC = () => {
   const [usernameError, setUsernameError] = useState("");
   const navigate = useNavigate();
 
+  // Función para manejar el registro de usuario
   const handleRegister = () => {
+    // Validar los campos del formulario
     if (!nombre || !apellido || !email || !username || !password) {
       setError("Todos los campos son obligatorios");
       return;
     }
-
+    // Validar el correo electrónico
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(email)) {
       setEmailError("Por favor, ingresa un correo electrónico válido.");
@@ -51,6 +55,7 @@ const Register: React.FC = () => {
       setEmailError("");
     }
 
+    // Validar la contraseña (mínimo 6 caracteres)
     if (password.length < 6) {
       setPasswordError("La contraseña debe tener al menos 6 caracteres.");
       return;
@@ -58,9 +63,12 @@ const Register: React.FC = () => {
       setPasswordError("");
     }
 
+    // Obtener los usuarios almacenados en localStorage
     const usuarios = JSON.parse(localStorage.getItem("usuarios") || "[]");
+    // Verificar si el nombre de usuario ya existe
     const userExists = usuarios.some((user: Usuario) => user.username === username);
 
+    // Si el nombre de usuario ya existe, mostrar un mensaje de error
     if (userExists) {
       setUsernameError("El nombre de usuario ya está en uso.");
       return;
@@ -68,6 +76,7 @@ const Register: React.FC = () => {
       setUsernameError("");
     }
 
+    // Crear un nuevo usuario con los datos del formulario
     const nuevoUsuario: Usuario = {
       id: usuarios.length + 1,
       nombre,
@@ -78,11 +87,13 @@ const Register: React.FC = () => {
       role,
     };
 
+    // Agregar el nuevo usuario al arreglo y almacenar en localStorage
     usuarios.push(nuevoUsuario);
     localStorage.setItem("usuarios", JSON.stringify(usuarios));
     navigate("/login");
   };
 
+  // Retornar el formulario de registro de usuario
   return (
     <Box
       sx={{

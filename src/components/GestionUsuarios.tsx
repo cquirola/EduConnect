@@ -1,4 +1,3 @@
-// src/components/GestionUsuarios.tsx
 import React, { useState, useEffect } from "react";
 import {
   Table,
@@ -23,6 +22,7 @@ import {
 } from "@mui/material";
 import { useAuth } from "./AuthContext";
 
+//Interfaz de usuario
 interface Usuario {
   id: number;
   nombre: string;
@@ -31,10 +31,15 @@ interface Usuario {
   role: string;
 }
 
-const GestionUsuarios: React.FC = () => {
+//Gestión de usuarios
+export const GestionUsuarios: React.FC = () => {
+  //Obtener el rol del usuario
   const { role } = useAuth();
+  //Lista de usuarios
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  //Estado para mostrar el diálogo de edición
   const [open, setOpen] = useState(false);
+  //Estado para almacenar el usuario a editar
   const [usuarioEdit, setUsuarioEdit] = useState<Usuario | null>(null);
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
@@ -42,18 +47,21 @@ const GestionUsuarios: React.FC = () => {
   const [roleEdit, setRoleEdit] = useState("publicador");
 
   useEffect(() => {
+    //Obtener los usuarios almacenados en localStorage
     const storedUsuarios = localStorage.getItem("usuarios");
     if (storedUsuarios) {
       setUsuarios(JSON.parse(storedUsuarios));
     }
   }, []);
 
+  //Eliminar usuario de la lista y actualizar localStorage
   const eliminarUsuario = (id: number) => {
     const nuevosUsuarios = usuarios.filter((usuario) => usuario.id !== id);
     setUsuarios(nuevosUsuarios);
     localStorage.setItem("usuarios", JSON.stringify(nuevosUsuarios));
   };
 
+  //Editar usuario
   const editarUsuario = (usuario: Usuario) => {
     setUsuarioEdit(usuario);
     setNombre(usuario.nombre);
@@ -63,11 +71,13 @@ const GestionUsuarios: React.FC = () => {
     setOpen(true);
   };
 
+  //Cierra el diálogo de edición
   const handleClose = () => {
     setOpen(false);
     setUsuarioEdit(null);
   };
 
+  //Guardar cambios al editar usuario y actualizar localStorage
   const handleSave = () => {
     if (usuarioEdit) {
       const updatedUsuarios = usuarios.map((usuario) =>
@@ -81,6 +91,7 @@ const GestionUsuarios: React.FC = () => {
     }
   };
 
+  //Si el usuario no es administrador, mostrar mensaje de acceso denegado
   if (role !== "admin") {
     return (
       <Typography variant="h6" color="error">
@@ -101,7 +112,7 @@ const GestionUsuarios: React.FC = () => {
         elevation={3}
         sx={{
           padding: "24px",
-          maxWidth: "800px", // Reducir el tamaño máximo para centrar más
+          maxWidth: "800px", 
           width: "100%",
           textAlign: "center",
           overflow: "hidden",
@@ -110,6 +121,8 @@ const GestionUsuarios: React.FC = () => {
         <Typography variant="h4" gutterBottom>
           Gestión de Usuarios
         </Typography>
+
+        {/* Tabla de usuarios */}
         <TableContainer component={Paper} sx={{ maxHeight: 400, overflow: 'auto' }}>
           <Table>
             <TableHead>
@@ -204,4 +217,4 @@ const GestionUsuarios: React.FC = () => {
   );
 };
 
-export default GestionUsuarios;
+

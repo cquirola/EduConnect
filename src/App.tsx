@@ -4,21 +4,23 @@ import CssBaseline from '@mui/material/CssBaseline';
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./components/AuthContext";
-import NavBar from "./components/NavBar";
-import Home from "./components/Home";
-import About from "./components/About";
-import Login from "./components/Login";
+import {NavBar} from "./components/NavBar";
+import {Home} from "./components/Home";
+import {About} from "./components/About";
+import {Login} from "./components/Login";
 import Register from "./components/Register";
-import Dashboard from "./components/Dashboard";
+import {Dashboard} from "./components/Dashboard";
 import Posts from "./components/Posts";
 import Usuarios from "./components/Usuarios";
-import GestionUsuarios from "./components/GestionUsuarios";
+import {GestionUsuarios} from "./components/GestionUsuarios";
 import theme from './components/teme';
 
-
+// Componente funcional AppContent
 const AppContent: React.FC = () => {
+  // Obtener el usuario autenticado y el rol
   const { authUser, role } = useAuth();
 
+  // Rutas de la aplicación y componentes a renderizar
   return (
     <>
       <NavBar />
@@ -37,6 +39,7 @@ const AppContent: React.FC = () => {
   );
 };
 
+// Componente funcional App
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>

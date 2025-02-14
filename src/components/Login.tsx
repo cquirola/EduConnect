@@ -12,6 +12,7 @@ interface Usuario {
   role: string;
 }
 
+// Estilos personalizados para el fondo
 const Background = styled(Box)({
   position: "fixed",
   top: 0,
@@ -27,17 +28,23 @@ const Background = styled(Box)({
   backgroundRepeat: "no-repeat",
 });
 
-const Login: React.FC = () => {
+// Componente funcional Login/Iniciar Sesión
+export const Login: React.FC = () => {
+  // Hook para la navegación
   const navigate = useNavigate();
+  // Hook para la autenticación
   const { login } = useAuth();
 
+  // Estados para el nombre de usuario y contraseña
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // Función para manejar el inicio de sesión
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Obtener los usuarios almacenados en localStorage
     const storedUsers = localStorage.getItem("usuarios");
     if (!storedUsers) {
       setError("No hay usuarios registrados.");
@@ -50,14 +57,17 @@ const Login: React.FC = () => {
     // Buscar el usuario por nombre y contraseña
     const foundUser = users.find((user) => user.username === username && user.password === password);
 
+    // Si se encuentra el usuario, iniciar sesión y redirigir a la página principal
     if (foundUser) {
       login(foundUser.username, foundUser.role); // Iniciar sesión correctamente
       navigate("/");
     } else {
+      // Si no se encuentra, mostrar un mensaje de error
       setError("Usuario o contraseña incorrectos.");
     }
   };
 
+  // Retornar el formulario de inicio de sesión
   return (
     <Background>
       <Container maxWidth="sm">
@@ -94,4 +104,3 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;

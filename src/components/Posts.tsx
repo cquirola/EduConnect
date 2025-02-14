@@ -1,4 +1,3 @@
-// src/components/Posts.tsx
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -15,6 +14,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { useAuth } from "./AuthContext";
 
+//Interfaz de la publicación y comentario
 interface Post {
   id: number;
   author: string;
@@ -35,11 +35,13 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff5ee',
 }));
 
+// Contenedor personalizado
 const StyledContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(4),
   marginBottom: theme.spacing(4),
 }));
 
+// Estilos personalizados para la publicación
 const PostPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
   marginBottom: theme.spacing(2),
@@ -49,17 +51,24 @@ const PostPaper = styled(Paper)(({ theme }) => ({
   transition: 'box-shadow 0.3s ease-in-out',
 }));
 
+// Contenedor para los comentarios
 const CommentSection = styled('div')(({ theme }) => ({
   marginLeft: theme.spacing(7),
   marginTop: theme.spacing(1),
 }));
 
+// Componente funcional Posts/Publicaciones
 const Posts: React.FC = () => {
+  // Obtener el usuario autenticado y su rol
   const { authUser, role } = useAuth();
+  // Estados para las publicaciones y comentarios
   const [posts, setPosts] = useState<Post[]>([]);
+  // Estado para la nueva publicación
   const [newPost, setNewPost] = useState<string>("");
+  // Estado para el texto de los comentarios
   const [commentTexts, setCommentTexts] = useState<{ [key: number]: string }>({});
 
+  // Cargar las publicaciones desde localStorage
   useEffect(() => {
     const storedPosts = localStorage.getItem("posts");
     if (storedPosts) {
@@ -67,10 +76,12 @@ const Posts: React.FC = () => {
     }
   }, []);
 
+  // Guardar las publicaciones en localStorage
   useEffect(() => {
     localStorage.setItem("posts", JSON.stringify(posts));
   }, [posts]);
 
+  // Función para agregar una nueva publicación
   const handleAddPost = () => {
     if (newPost.trim()) {
       const post: Post = {
@@ -84,14 +95,17 @@ const Posts: React.FC = () => {
     }
   };
 
+  // Función para eliminar una publicación
   const handleDeletePost = (id: number) => {
     setPosts(posts.filter((post) => post.id !== id));
   };
 
+  // Función para manejar los comentarios
   const handleCommentChange = (postId: number, text: string) => {
     setCommentTexts({ ...commentTexts, [postId]: text });
   };
 
+  // Función para agregar un comentario
   const handleAddComment = (postId: number) => {
     if (!commentTexts[postId]?.trim()) return;
 
@@ -111,6 +125,7 @@ const Posts: React.FC = () => {
     setCommentTexts({ ...commentTexts, [postId]: "" });
   };
 
+  // Componente de publicaciones
   return (
     <StyledContainer maxWidth="sm">
       <StyledPaper elevation={0}>

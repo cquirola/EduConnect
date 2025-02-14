@@ -1,7 +1,7 @@
-// src/components/Usuarios.tsx
 import React, { useEffect, useState } from "react";
 import { Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from "@mui/material";
 
+//Interfaz de usuario
 interface Usuario {
   id: number;
   nombre: string;
@@ -10,9 +10,12 @@ interface Usuario {
   role: string;
 }
 
+//Componente funcional Usuarios
 const Usuarios: React.FC = () => {
+  //Lista de usuarios
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
+  //Obtener los usuarios almacenados en localStorage
   useEffect(() => {
     const storedUsuarios = localStorage.getItem("usuarios");
     if (storedUsuarios) {
@@ -20,6 +23,7 @@ const Usuarios: React.FC = () => {
     }
   }, []);
 
+  //Retornar la tabla con la lista de usuarios
   return (
     <Container>
       <Typography variant="h4" gutterBottom>

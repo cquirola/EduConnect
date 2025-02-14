@@ -1,4 +1,3 @@
-// src/components/About.tsx
 import React from "react";
 import { Container, Typography, Box, List, ListItem, ListItemText, ListItemAvatar, Avatar } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -21,7 +20,8 @@ const BackgroundContainer = styled(Box)(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const About: React.FC = () => {
+//Componente funcional About/Sobre nosotros
+export const About: React.FC = () => {
   return (
     <BackgroundContainer>
       <Container maxWidth="md">
@@ -47,6 +47,7 @@ const About: React.FC = () => {
                 A
               </Avatar>
             </ListItemAvatar>
+            {/* Integrantes del grupo */}
             <ListItemText primary="Adriana Borja" />
           </ListItem>
           <ListItem>
@@ -71,4 +72,4 @@ const About: React.FC = () => {
   );
 };
 
-export default About;
+

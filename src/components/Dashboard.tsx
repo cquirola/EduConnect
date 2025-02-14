@@ -1,18 +1,21 @@
-// src/components/Dashboard.tsx
 import React, { useState, useEffect } from "react";
 import { Container, Typography, Box } from "@mui/material";
 import { useAuth } from "./AuthContext";
 import Confetti from "react-confetti";
 
-const Dashboard: React.FC = () => {
+export const Dashboard: React.FC = () => {
+  // Obtener el usuario autenticado y su rol
   const { authUser, role } = useAuth();
   const [showConfetti, setShowConfetti] = useState(true);
 
+  // Mostrar confeti por 3 segundos
   useEffect(() => {
     const timer = setTimeout(() => setShowConfetti(false), 3000);
     return () => clearTimeout(timer);
   }, []);
 
+  // Estilo para centrar el contenido
+  // Mensaje de bienvenida y descripción de los permisos
   return (
     <Box
       display="flex"
@@ -43,4 +46,3 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
