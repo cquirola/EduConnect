@@ -124,7 +124,7 @@ export const GestionUsuarios: React.FC = () => {
 
         {/* Tabla de usuarios */}
         <TableContainer component={Paper} sx={{ maxHeight: 400, overflow: 'auto' }}>
-          <Table>
+        <Table sx={{ "& td, & th": { padding: "12px"  } }}>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
